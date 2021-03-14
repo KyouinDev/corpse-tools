@@ -1,0 +1,36 @@
+{
+  "replacements": [
+    {
+      "name": "new_line",
+      "pattern": "00",
+      "replace_with": "0A",
+      "skip_comparison": true
+    },
+    {
+      "name": "name_start",
+      "pattern": "81 79",
+      "replace_with": "5B 6E 61 6D 65 5D"
+    },
+    {
+      "name": "text_start",
+      "pattern": "81 7A",
+      "replace_with": "5B 74 65 78 74 5D"
+    },
+    {
+      "name": "line_break",
+      "pattern": "25 4E",
+      "replace_with": "5B 62 72 65 61 6B 5D",
+      "skip_comparison": true
+    },
+    {
+      "name": "line_end",
+      "pattern": "25 4B 25 50",
+      "replace_with": "5B 65 6E 64 5D"
+    },
+    {
+      "name": "line_end_choice",
+      "pattern": "25 4B 25 70",
+      "replace_with": "5B 63 68 6F 69 63 65 5D"
+    }
+  ]
+}
