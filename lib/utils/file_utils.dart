@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:corpse_tools/utils.dart';
+import '../utils.dart';
 
 String readFileAsHexString(File file) {
   var bytes = file.readAsBytesSync();

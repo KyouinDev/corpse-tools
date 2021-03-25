@@ -14,8 +14,12 @@ Obviously, the first parameter refers to the original .BIN file, while the secon
 Before replacing the text, a comparison check will be ran. This will checks if any lines were changed, or if there are
 some errors.
 
+## Supported game(s)
+
+- Corpse Party: Book of Shadows (PC)
+
 ## Latest changelog
 
-### 0.1.0
+### 0.1.1
 
-- Initial version, bop
+- Effective Dart analysis improvements.

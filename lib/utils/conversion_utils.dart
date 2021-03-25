@@ -3,7 +3,7 @@ String intToHex(int dec) {
 }
 
 String intListToHexString(List<int> dec) {
-  return dec.map((i) => intToHex(i)).join(' ');
+  return dec.map(intToHex).join(' ');
 }
 
 int hexToInt(String hex) {
@@ -11,5 +11,5 @@ int hexToInt(String hex) {
 }
 
 List<int> hexStringToIntList(String hex) {
-  return hex.split(' ').map((h) => hexToInt(h)).toList();
+  return hex.split(' ').map(hexToInt).toList();
 }

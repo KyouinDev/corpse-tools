@@ -4,7 +4,12 @@ class Replacement {
   final String replaceWith;
   final bool skipComparison;
 
-  Replacement(this.name, this.pattern, this.replaceWith, this.skipComparison);
+  Replacement({
+    required this.name,
+    required this.pattern,
+    required this.replaceWith,
+    required this.skipComparison,
+  });
 
   static List<Replacement> listFromJson(List<dynamic> json) {
     return List.generate(json.length, (r) => Replacement.fromJson(json[r]));
@@ -12,10 +17,10 @@ class Replacement {
 
   factory Replacement.fromJson(Map<String, dynamic> json) {
     return Replacement(
-      json['name'],
-      json['pattern'],
-      json['replace_with'],
-      json['skip_comparison'] ?? false,
+      name: json['name'],
+      pattern: json['pattern'],
+      replaceWith: json['replace_with'],
+      skipComparison: json['skip_comparison'] ?? false,
     );
   }
 }

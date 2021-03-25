@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:corpse_tools/app_def.dart';
-import 'package:corpse_tools/utils.dart';
+
+import '../app_def.dart';
+import '../utils.dart';
 
 class ExtractTextCommand extends Command {
   @override
@@ -23,7 +24,8 @@ class ExtractTextCommand extends Command {
   @override
   void run() {
     if (argResults?['input'] == null) {
-      print('Missing parameters. Run "help extract-text" for info.');
+      print('Missing parameters. '
+          'Run "corpse_tools.exe help extract-text" for info.');
       return;
     }
 

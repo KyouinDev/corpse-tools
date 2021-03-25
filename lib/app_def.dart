@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:corpse_tools/entities/replacement.dart';
+import 'entities/replacement.dart';
 
 class AppDef {
   final List<Replacement> replacements;

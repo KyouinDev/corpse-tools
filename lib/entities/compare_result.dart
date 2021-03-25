@@ -3,5 +3,9 @@ class CompareResult {
   final List<String> messages;
   final int changedLines;
 
-  CompareResult(this.success, this.messages, this.changedLines);
+  CompareResult({
+    required this.success,
+    required this.messages,
+    required this.changedLines,
+  });
 }

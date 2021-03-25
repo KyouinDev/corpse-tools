@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:corpse_tools/utils.dart';
+
+import '../utils.dart';
 
 class ReplaceTextCommand extends Command {
   @override
@@ -28,7 +29,8 @@ class ReplaceTextCommand extends Command {
   @override
   void run() {
     if (argResults?['original'] == null || argResults?['modified'] == null) {
-      print('Missing parameters. Run "help replace-text" for info.');
+      print('Missing parameters. '
+          'Run "corpse_tools.exe help replace-text" for info.');
       return;
     }
 
