@@ -1,34 +1,37 @@
 import '../app_def.dart';
 import '../entities/compare_result.dart';
-import '../entities/replacement.dart';
 import '../utils.dart';
 
-String getUnreadableLines(String hex) {
+String getUnreadableContent(String hex) {
   return hex.substring(0, hex.lastIndexOf('02') + 2);
 }
 
-String getReadableLines(String hex) {
+String getReadableContent(String hex) {
   return hex.substring(hex.lastIndexOf('02') + 3);
 }
 
 String replaceSequences(String hex, {bool extract = true}) {
-  for (var replacement in AppDef().replacements) {
+  for (var replacement in AppDef().replacements.entries) {
     if (extract) {
-      hex = hex.replaceAll(replacement.pattern, replacement.replaceWith);
+      hex = hex.replaceAll(replacement.key, replacement.value);
     } else {
-      hex = hex.replaceAll(replacement.replaceWith, replacement.pattern);
+      hex = hex.replaceAll(replacement.value, replacement.key);
     }
   }
 
   return hex;
 }
 
-CompareResult compareEdit(String original, String modified) {
-  var lineSeparator = AppDef().replacements[0].replaceWith;
-  var originalLines = original.split(lineSeparator);
-  var modifiedLines = modified.split(lineSeparator);
+int compareLine(String origLine, String modifLine, String sequence) {
+  return origLine.count(sequence) - modifLine.count(sequence);
+}
 
-  if (originalLines.length != modifiedLines.length) {
+CompareResult compareEdit(String original, String modified) {
+  var separator = AppDef().replacements.values.first;
+  var origLines = original.split(separator);
+  var modifLines = modified.split(separator);
+
+  if (origLines.length != modifLines.length) {
     return CompareResult(
       success: false,
       messages: ['Number of lines does not match.'],
@@ -40,31 +43,31 @@ CompareResult compareEdit(String original, String modified) {
   var changedLines = 0;
   var success = true;
 
-  for (var i = 0; i < originalLines.length; i++) {
-    var originalLine = originalLines[i];
-    var modifiedLine = modifiedLines[i];
+  for (var i = 0; i < origLines.length; i++) {
+    var origLine = origLines[i];
+    var modifLine = modifLines[i];
 
-    for (var replacement in AppDef().replacements) {
-      var entity = replacement.replaceWith;
+    for (var toSkip in AppDef().skipComparison) {
+      origLine = origLine.replaceAll(toSkip, '');
+      modifLine = modifLine.replaceAll(toSkip, '');
+    }
 
-      if (replacement.skipComparison) {
-        originalLine = originalLine.replaceAll(entity, '');
-        modifiedLine = modifiedLine.replaceAll(entity, '');
-        continue;
-      }
+    var replacements = AppDef().replacements.entries.where((entry) {
+      return !AppDef().skipComparison.contains(entry.value);
+    }).map((entry) => entry.value);
 
-      var name = String.fromCharCodes(hexStringToIntList(entity));
-      var c1 = originalLine.count(entity);
-      var c2 = modifiedLine.count(entity);
+    for (var replacement in replacements) {
+      var compare = compareLine(origLine, modifLine, replacement);
+      var name = String.fromCharCodes(hexStringToIntList(replacement));
 
-      if (c1 != c2) {
-        messages.add('Line ${i + 1}: found ${c1 > c2 ? 'less' : 'more'}'
+      if (compare != 0) {
+        messages.add('Line ${i + 1}: found ${compare > 0 ? 'less' : 'more'}'
             ' $name than expected');
         success = false;
       }
     }
 
-    if (originalLine != modifiedLine) changedLines++;
+    if (origLine != modifLine) changedLines++;
   }
 
   return CompareResult(
@@ -72,6 +75,11 @@ CompareResult compareEdit(String original, String modified) {
     messages: messages,
     changedLines: changedLines,
   );
+}
+
+void printElapsedTime(DateTime from) {
+  var elapsed = DateTime.now().difference(from);
+  print('Elapsed time: ${elapsed.inMilliseconds} ms.');
 }
 
 extension SequenceCount on String {

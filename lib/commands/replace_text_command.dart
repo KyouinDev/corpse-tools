@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 
 import '../utils.dart';
@@ -28,45 +26,45 @@ class ReplaceTextCommand extends Command {
 
   @override
   void run() {
-    if (argResults?['original'] == null || argResults?['modified'] == null) {
-      print('Missing parameters. '
-          'Run "corpse_tools.exe help replace-text" for info.');
-      return;
-    }
+    var original = getFileFromArg(
+      arg: argResults!['original'],
+      command: 'replace-text',
+      expected: '.BIN',
+    );
 
-    var original = File(argResults?['original']);
-    var modified = File(argResults?['modified']);
+    if (original == null) return;
 
-    if (!original.existsSync() || !original.path.endsWith('.BIN')) {
-      print('Original file does not exist or not a .BIN type.');
-      return;
-    }
+    var modified = getFileFromArg(
+      arg: argResults!['modified'],
+      command: 'replace-text',
+      expected: '.txt',
+    );
 
-    if (!modified.existsSync() || !modified.path.endsWith('.txt')) {
-      print('Modified file does not exist or not a .txt type.');
-      return;
-    }
+    if (modified == null) return;
 
-    var modifiedLine = readFileAsHexString(modified);
-    var originalLine = getReadableLines(readFileAsHexString(original));
-    var result = compareEdit(replaceSequences(originalLine), modifiedLine);
+    var time = DateTime.now();
+    var modifContent = readFileAsHexString(modified);
+    var origHexString = readFileAsHexString(original);
+    var origContent = getReadableContent(origHexString);
+    var result = compareEdit(replaceSequences(origContent), modifContent);
 
-    if (result.success) {
-      if (result.changedLines == 0) {
-        print('No lines were changed.');
-        return;
-      }
-
-      var lines = getUnreadableLines(readFileAsHexString(original));
-      var replacedLines = replaceSequences(modifiedLine, extract: false);
-      writeToFile(original, '$lines $replacedLines');
-      print('Done successfully. Total lines replaced: ${result.changedLines}.');
-    } else {
+    if (!result.success) {
       print('Error while trying to replace modified text:');
-
-      for (var s in result.messages) {
-        print(' - $s');
-      }
+      printError(String s) => print(' - $s'); //aux function
+      result.messages.forEach(printError);
+      return;
     }
+
+    if (result.changedLines == 0) {
+      print('No lines were changed.');
+      printElapsedTime(time);
+      return;
+    }
+
+    var unreadable = getUnreadableContent(origHexString);
+    var modifReplacedContent = replaceSequences(modifContent, extract: false);
+    writeToFile(original, '$unreadable $modifReplacedContent');
+    print('Done successfully. Total lines replaced: ${result.changedLines}.');
+    printElapsedTime(time);
   }
 }
