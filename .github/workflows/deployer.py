@@ -30,7 +30,6 @@ def check_analyze():
         exit(1)
 
     analyze_success()
-    exit(0)
 
 
 def broadcast_message(message):
@@ -38,9 +37,8 @@ def broadcast_message(message):
 
 
 def analyze_failed(issues_count: int, critical_issues_count: int):
-    broadcast_message(f"{owner_username}, last analyze check found some critical issues:\n\n"
-                      f"*{critical_issues_count}* critical issues\n"
-                      f"*{issues_count}* total issues\n\n"
+    broadcast_message(f"{owner_username}, last analyze check found {issues_count} issues, "
+                      f"*{critical_issues_count}* of them being critical."
                       f"Please fix them!")
 
 

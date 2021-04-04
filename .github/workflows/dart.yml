@@ -33,5 +33,5 @@ jobs:
         run: dart pub get
 
       - name: Analyze project source
-        run: dart analyze --format=machine --fatal-infos . 2>&1 >/dev/null
+        run: dart analyze --format=machine . 2>&1 >/dev/null
          | python3 .github/workflows/deployer.py check_analyze
