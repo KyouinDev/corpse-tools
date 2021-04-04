@@ -43,7 +43,7 @@ def analyze_failed(issues_count: int, critical_issues_count: int):
 
 
 def analyze_success():
-    broadcast_message(f"{owner_username}, last analyze check found no critical issues.\n"
+    broadcast_message(f"{owner_username}, last analyze check found no issues.\n"
                       f"It seems alright!")
 
 
