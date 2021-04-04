@@ -1,0 +1,24 @@
+name: Dart CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  analyze:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Github Checkout
+        uses: actions/checkout@v2
+
+      - name: Dart Setup
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Analyze project source
+        run: dart analyze
