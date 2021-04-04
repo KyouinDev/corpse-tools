@@ -4,7 +4,6 @@ import 'package:args/command_runner.dart';
 import 'package:corpse_tools/commands.dart';
 
 void main(List<String> args) {
-  var testWorkflow;
   var desc = 'CorpseTools v0.1.1 made by Kyouin '
       '(https://github.com/KyouinDev/corpse_tools)\n'
       'Supported game(s):\n'
