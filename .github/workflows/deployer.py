@@ -25,7 +25,7 @@ def check_analyze():
 
         issues_count += 1
 
-    if critical_issues_count > 0:
+    if issues_count > 0:
         analyze_failed(issues_count, critical_issues_count)
         exit(1)
 
