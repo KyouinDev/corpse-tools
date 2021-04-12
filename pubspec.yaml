@@ -1,6 +1,6 @@
 name: corpse_tools
 description: A tool to extract/replace text in a readable way for Corpse Party .BIN files.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/KyouinDev/corpse_tools
 publish_to: none
 

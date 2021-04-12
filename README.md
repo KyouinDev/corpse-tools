@@ -20,7 +20,6 @@ some errors.
 
 ## Latest changelog
 
-### 0.1.1
+## 0.1.2
 
-- Effective Dart analysis improvements.
-- Major improvements and fixes.
+- Application no longer depends on definitions file.

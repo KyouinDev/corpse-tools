@@ -1,6 +1,19 @@
-import '../app_def.dart';
 import '../entities/compare_result.dart';
 import '../utils.dart';
+
+Map<String, String> replacements = {
+  "00": "0A",
+  "81 79": "5B 6E 61 6D 65 5D",
+  "81 7A": "5B 74 65 78 74 5D",
+  "25 4E": "5B 62 72 65 61 6B 5D",
+  "25 4B 25 50": "5B 65 6E 64 5D",
+  "25 4B 25 70": "5B 63 68 6F 69 63 65 5D",
+};
+
+List<String> skipComparison = [
+  "0A",
+  "5B 62 72 65 61 6B 5D",
+];
 
 String getUnreadableContent(String hex) {
   return hex.substring(0, hex.lastIndexOf('02') + 2);
@@ -11,7 +24,7 @@ String getReadableContent(String hex) {
 }
 
 String replaceSequences(String hex, {bool extract = true}) {
-  for (var replacement in AppDef().replacements.entries) {
+  for (var replacement in replacements.entries) {
     if (extract) {
       hex = hex.replaceAll(replacement.key, replacement.value);
     } else {
@@ -27,7 +40,7 @@ int compareLine(String origLine, String modifLine, String sequence) {
 }
 
 CompareResult compareEdit(String original, String modified) {
-  var separator = AppDef().replacements.values.first;
+  var separator = replacements.values.first;
   var origLines = original.split(separator);
   var modifLines = modified.split(separator);
 
@@ -47,16 +60,16 @@ CompareResult compareEdit(String original, String modified) {
     var origLine = origLines[i];
     var modifLine = modifLines[i];
 
-    for (var toSkip in AppDef().skipComparison) {
+    for (var toSkip in skipComparison) {
       origLine = origLine.replaceAll(toSkip, '');
       modifLine = modifLine.replaceAll(toSkip, '');
     }
 
-    var replacements = AppDef().replacements.entries.where((entry) {
-      return !AppDef().skipComparison.contains(entry.value);
+    var notSkip = replacements.entries.where((entry) {
+      return !skipComparison.contains(entry.value);
     }).map((entry) => entry.value);
 
-    for (var replacement in replacements) {
+    for (var replacement in notSkip) {
       var compare = compareLine(origLine, modifLine, replacement);
       var name = String.fromCharCodes(hexStringToIntList(replacement));
 

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 
-import '../app_def.dart';
 import '../utils.dart';
 
 class ExtractTextCommand extends Command {
@@ -34,7 +33,7 @@ class ExtractTextCommand extends Command {
     var time = DateTime.now();
     var readableContent = getReadableContent(readFileAsHexString(input));
     var replacedContent = replaceSequences(readableContent);
-    var count = replacedContent.count(AppDef().replacements.values.first) + 1;
+    var count = replacedContent.count(replacements.values.first) + 1;
     writeToFile(File(input.path.replaceAll('.BIN', '.txt')), replacedContent);
     print('Done successfully. Total lines extracted: $count.');
     printElapsedTime(time);
