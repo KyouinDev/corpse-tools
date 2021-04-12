@@ -21,6 +21,9 @@ jobs:
       - name: Dart setup
         uses: cedx/setup-dart@v2
 
+      - name: Install dependencies
+        run: dart pub get
+
       - name: Install Python 3.7
         uses: actions/setup-python@v2
         with:
@@ -28,9 +31,6 @@ jobs:
 
       - name: Install requirements
         run: pip install -r .github/workflows/requirements.txt
-
-      - name: Install dependencies
-        run: dart pub get
 
       - name: Analyze project source
         run: dartanalyzer --format machine . 2>&1 >/dev/null | python3 .github/workflows/deployer.py check_analyze

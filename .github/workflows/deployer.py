@@ -9,6 +9,7 @@ mode = sys.argv[1]
 token = os.environ["BOT_TOKEN"]
 dev_chat_id = os.environ["DEV_CHAT_ID"]
 owner_username = "@HKyouma"
+project_name = "corpse_tools"
 
 bot = Bot(token)
 
@@ -20,16 +21,16 @@ def check_analyze():
         info = line.strip().split("|")
         issue_type = info[1]
 
-        if issue_type != "LINT":
+        if issue_type not in ["LINT", "HINT"]:
             critical_issues_count += 1
 
         issues_count += 1
 
-    if issues_count > 0:
+    if critical_issues_count > 0:
         analyze_failed(issues_count, critical_issues_count)
         exit(1)
 
-    analyze_success()
+    analyze_success(issues_count)
 
 
 def broadcast_message(message):
@@ -37,14 +38,17 @@ def broadcast_message(message):
 
 
 def analyze_failed(issues_count: int, critical_issues_count: int):
-    broadcast_message(f"{owner_username}, last analyze check found {issues_count} issues, "
+    broadcast_message(f"{owner_username}, last *{project_name}* analyze check found {issues_count} issues, "
                       f"*{critical_issues_count}* of them being critical.\n"
                       f"Please fix them!")
 
 
-def analyze_success():
-    broadcast_message(f"{owner_username}, last analyze check found no issues.\n"
-                      f"It seems alright!")
+def analyze_success(issues_count: int):
+    if issues_count > 0:
+        broadcast_message(f"{owner_username}, last *{project_name}* analyze found *{issues_count}* issues, "
+                          f"but none of them were critical!")
+    else:
+        broadcast_message(f"{owner_username}, last *{project_name}* analyze found no issues!")
 
 
 def main():
