@@ -13,8 +13,8 @@ void main(List<String> args) async {
 
   try {
     await runner.run(args);
-  } on UsageException catch(e, s) {
-    print('$e\n$s');
+  } on UsageException catch(e) {
+    print(e);
   } on Exception catch(e, s) {
     print('Unknown $e\n$s');
     print('Please report this to the developer.');
