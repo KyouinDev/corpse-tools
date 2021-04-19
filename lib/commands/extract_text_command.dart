@@ -34,6 +34,13 @@ class ExtractTextCommand extends Command {
     var readableContent = getReadableContent(readFileAsHexString(input));
     var replacedContent = replaceSequences(readableContent);
     var count = replacedContent.count(replacements.values.first) + 1;
+    var hexCount = (replacedContent.length + 1) ~/ 3;
+
+    if (hexCount == count - 1) {
+      print('The provided file does not contain any readable text.');
+      return;
+    }
+
     writeToFile(File(input.path.replaceAll('.BIN', '.txt')), replacedContent);
     print('Done successfully. Total lines extracted: $count.');
     printElapsedTime(time);
