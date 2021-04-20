@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 
+import '../entities/elapsed_time.dart';
 import '../utils.dart';
 
 class ReplaceTextCommand extends Command {
@@ -42,7 +43,7 @@ class ReplaceTextCommand extends Command {
 
     if (modified == null) return;
 
-    var time = DateTime.now();
+    var time = ElapsedTime();
     var modifContent = readFileAsHexString(modified);
     var origHexString = readFileAsHexString(original);
     var origContent = getReadableContent(origHexString);
@@ -50,14 +51,14 @@ class ReplaceTextCommand extends Command {
 
     if (!result.success) {
       print('Error while trying to replace modified text:');
-      printError(String s) => print(' - $s'); //aux function
+      printError(s) => print(' - $s'); //aux function
       result.messages.forEach(printError);
       return;
     }
 
     if (result.changedLines == 0) {
       print('No lines were changed.');
-      printElapsedTime(time);
+      time.end();
       return;
     }
 
@@ -65,6 +66,6 @@ class ReplaceTextCommand extends Command {
     var modifReplacedContent = replaceSequences(modifContent, extract: false);
     writeToFile(original, '$unreadable $modifReplacedContent');
     print('Done successfully. Total lines replaced: ${result.changedLines}.');
-    printElapsedTime(time);
+    time.end();
   }
 }

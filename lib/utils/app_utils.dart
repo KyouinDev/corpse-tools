@@ -2,17 +2,17 @@ import '../entities/compare_result.dart';
 import '../utils.dart';
 
 Map<String, String> replacements = {
-  "00": "0A",
-  "81 79": "5B 6E 61 6D 65 5D",
-  "81 7A": "5B 74 65 78 74 5D",
-  "25 4E": "5B 62 72 65 61 6B 5D",
-  "25 4B 25 50": "5B 65 6E 64 5D",
-  "25 4B 25 70": "5B 63 68 6F 69 63 65 5D",
+  "00": "0A", // new line
+  "81 79": "5B 6E 61 6D 65 5D", // name
+  "81 7A": "5B 74 65 78 74 5D", // text
+  "25 4E": "5B 62 72 65 61 6B 5D", // break
+  "25 4B 25 50": "5B 65 6E 64 5D", // end
+  "25 4B 25 70": "5B 63 68 6F 69 63 65 5D", // choice
 };
 
 List<String> skipComparison = [
-  "0A",
-  "5B 62 72 65 61 6B 5D",
+  "0A", // new line
+  "5B 62 72 65 61 6B 5D", // break
 ];
 
 String getUnreadableContent(String hex) {
@@ -65,9 +65,9 @@ CompareResult compareEdit(String original, String modified) {
       modifLine = modifLine.replaceAll(toSkip, '');
     }
 
-    var notSkip = replacements.entries.where((entry) {
-      return !skipComparison.contains(entry.value);
-    }).map((entry) => entry.value);
+    var notSkip = replacements.entries
+        .where((entry) => !skipComparison.contains(entry.value))
+        .map((entry) => entry.value);
 
     for (var replacement in notSkip) {
       var compare = compareLine(origLine, modifLine, replacement);
@@ -88,11 +88,6 @@ CompareResult compareEdit(String original, String modified) {
     messages: messages,
     changedLines: changedLines,
   );
-}
-
-void printElapsedTime(DateTime from) {
-  var elapsed = DateTime.now().difference(from);
-  print('Elapsed time: ${elapsed.inMilliseconds} ms.');
 }
 
 extension SequenceCount on String {
