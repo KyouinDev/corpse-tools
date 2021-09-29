@@ -1,5 +1,5 @@
-import '../entities/compare_result.dart';
-import '../utils.dart';
+import 'package:corpse_tools/entities/compare_result.dart';
+import 'package:corpse_tools/utils.dart';
 
 Map<String, String> replacements = {
   "00": "0A", // new line
@@ -25,26 +25,23 @@ String getReadableContent(String hex) {
 
 String replaceSequences(String hex, {bool extract = true}) {
   for (var replacement in replacements.entries) {
-    if (extract) {
-      hex = hex.replaceAll(replacement.key, replacement.value);
-    } else {
-      hex = hex.replaceAll(replacement.value, replacement.key);
-    }
+    hex = extract
+        ? hex.replaceAll(replacement.key, replacement.value)
+        : hex.replaceAll(replacement.value, replacement.key);
   }
 
   return hex;
 }
 
-int compareLine(String origLine, String modifLine, String sequence) {
-  return origLine.count(sequence) - modifLine.count(sequence);
+int compareLine(String originalLine, String modifiedLine, String sequence) {
+  return originalLine.count(sequence) - modifiedLine.count(sequence);
 }
 
 CompareResult compareEdit(String original, String modified) {
   var separator = replacements.values.first;
-  var origLines = original.split(separator);
-  var modifLines = modified.split(separator);
-
-  if (origLines.length != modifLines.length) {
+  var originalLines = original.split(separator);
+  var modifiedLines = modified.split(separator);
+  if (originalLines.length != modifiedLines.length) {
     return CompareResult(
       success: false,
       messages: ['Number of lines does not match.'],
@@ -55,32 +52,32 @@ CompareResult compareEdit(String original, String modified) {
   var messages = <String>[];
   var changedLines = 0;
   var success = true;
-
-  for (var i = 0; i < origLines.length; i++) {
-    var origLine = origLines[i];
-    var modifLine = modifLines[i];
-
+  for (var i = 0; i < originalLines.length; i++) {
+    var originalLine = originalLines[i];
+    var modifiedLine = modifiedLines[i];
     for (var toSkip in skipComparison) {
-      origLine = origLine.replaceAll(toSkip, '');
-      modifLine = modifLine.replaceAll(toSkip, '');
+      originalLine = originalLine.replaceAll(toSkip, '');
+      modifiedLine = modifiedLine.replaceAll(toSkip, '');
     }
 
     var notSkip = replacements.entries
         .where((entry) => !skipComparison.contains(entry.value))
         .map((entry) => entry.value);
-
     for (var replacement in notSkip) {
-      var compare = compareLine(origLine, modifLine, replacement);
+      var compare = compareLine(originalLine, modifiedLine, replacement);
       var name = String.fromCharCodes(hexStringToIntList(replacement));
-
       if (compare != 0) {
-        messages.add('Line ${i + 1}: found ${compare > 0 ? 'less' : 'more'}'
-            ' $name than expected');
+        messages.add(
+          'Line ${i + 1}: found ${compare > 0 ? 'less' : 'more'}'
+          ' $name than expected',
+        );
         success = false;
       }
     }
 
-    if (origLine != modifLine) changedLines++;
+    if (originalLine != modifiedLine) {
+      changedLines++;
+    }
   }
 
   return CompareResult(

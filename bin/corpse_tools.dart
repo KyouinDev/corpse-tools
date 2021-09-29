@@ -2,7 +2,7 @@ import 'package:args/command_runner.dart';
 import 'package:corpse_tools/commands.dart';
 
 void main(List<String> args) async {
-  var desc = 'CorpseTools v0.1.3 made by Kyouin '
+  var desc = 'CorpseTools v0.1.4 made by Kyouin '
       '(https://github.com/KyouinDev/corpse_tools)\n'
       'Supported games:\n'
       ' - Corpse Party: Book of Shadows (2018, PC)'
@@ -13,9 +13,9 @@ void main(List<String> args) async {
 
   try {
     await runner.run(args);
-  } on UsageException catch(e) {
+  } on UsageException catch (e) {
     print(e);
-  } on Exception catch(e, s) {
+  } on Exception catch (e, s) {
     print('Unknown $e\n$s');
     print('Please report this to the developer.');
   }

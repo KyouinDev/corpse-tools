@@ -1,15 +1,7 @@
-String intToHex(int dec) {
-  return dec.toRadixString(16).padLeft(2, '0').toUpperCase();
-}
+String intToHex(int dec) => dec.toRadixString(16).padLeft(2, '0').toUpperCase();
 
-String intListToHexString(List<int> dec) {
-  return dec.map(intToHex).join(' ');
-}
+String intListToHexString(List<int> dec) => dec.map(intToHex).join(' ');
 
-int hexToInt(String hex) {
-  return int.parse(hex, radix: 16);
-}
+int hexToInt(String hex) => int.parse(hex, radix: 16);
 
-List<int> hexStringToIntList(String hex) {
-  return hex.split(' ').map(hexToInt).toList();
-}
+List<int> hexStringToIntList(String s) => s.split(' ').map(hexToInt).toList();
