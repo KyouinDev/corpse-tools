@@ -22,11 +22,7 @@ class ExtractTextCommand extends Command {
 
   @override
   void run() {
-    var input = getFileFromArg(
-      arg: argResults!['input'],
-      command: 'extract-text',
-      expected: '.BIN',
-    );
+    var input = getFileFromArg(argResults!['input'], 'extract-text', '.BIN');
     if (input == null) return;
 
     var time = ElapsedTime();
@@ -39,7 +35,8 @@ class ExtractTextCommand extends Command {
       return;
     }
 
-    writeToFile(File(input.path.replaceAll('.BIN', '.txt')), replacedContent);
+    var file = File(input.path.replaceAll('.BIN', '.txt'));
+    writeToFile(file, replacedContent);
     print('Done successfully. Total lines extracted: $linesCount.');
     time.end();
   }

@@ -2,11 +2,7 @@ import 'dart:io';
 
 import 'package:corpse_tools/utils.dart';
 
-File? getFileFromArg({
-  required dynamic arg,
-  required String command,
-  required String expected,
-}) {
+File? getFileFromArg(String? arg, String command, String expected) {
   if (arg == null) {
     print('Missing parameters. Run "corpse_tools.exe help $command" for info.');
     return null;

@@ -1,7 +1,7 @@
 import 'package:corpse_tools/entities/compare_result.dart';
 import 'package:corpse_tools/utils.dart';
 
-Map<String, String> replacements = {
+final replacements = {
   "00": "0A", // new line
   "81 79": "5B 6E 61 6D 65 5D", // name
   "81 7A": "5B 74 65 78 74 5D", // text
@@ -10,7 +10,7 @@ Map<String, String> replacements = {
   "25 4B 25 70": "5B 63 68 6F 69 63 65 5D", // choice
 };
 
-List<String> skipComparison = [
+final skipComparison = [
   "0A", // new line
   "5B 62 72 65 61 6B 5D", // break
 ];
@@ -24,10 +24,10 @@ String getReadableContent(String hex) {
 }
 
 String replaceSequences(String hex, {bool extract = true}) {
-  for (var replacement in replacements.entries) {
+  for (var key in replacements.keys) {
     hex = extract
-        ? hex.replaceAll(replacement.key, replacement.value)
-        : hex.replaceAll(replacement.value, replacement.key);
+        ? hex.replaceAll(key, replacements[key]!)
+        : hex.replaceAll(replacements[key]!, key);
   }
 
   return hex;
@@ -49,9 +49,9 @@ CompareResult compareEdit(String original, String modified) {
     );
   }
 
+  var success = true;
   var messages = <String>[];
   var changedLines = 0;
-  var success = true;
   for (var i = 0; i < originalLines.length; i++) {
     var originalLine = originalLines[i];
     var modifiedLine = modifiedLines[i];
@@ -65,8 +65,8 @@ CompareResult compareEdit(String original, String modified) {
         .map((entry) => entry.value);
     for (var replacement in notSkip) {
       var compare = compareLine(originalLine, modifiedLine, replacement);
-      var name = String.fromCharCodes(hexStringToIntList(replacement));
       if (compare != 0) {
+        var name = String.fromCharCodes(hexStringToIntList(replacement));
         messages.add(
           'Line ${i + 1}: found ${compare > 0 ? 'less' : 'more'}'
           ' $name than expected',
