@@ -33,4 +33,4 @@ jobs:
         run: pip install -r .github/workflows/requirements.txt
 
       - name: Analyze project source
-        run: dartanalyzer --format machine . 2>&1 >/dev/null | python3 .github/workflows/deployer.py check_analyze
+        run: dart analyze --format machine . 2>&1 >/dev/null | python3 .github/workflows/deployer.py check_analyze
